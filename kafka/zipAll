@@ -1,0 +1,8 @@
+#!/bin/bash
+echo Zipping ...
+for dir in */
+do
+    file=$(echo $dir | rev | cut -c 2- | rev) # remove trailing slash
+    echo Zipping kafka-$file.zip from $dir
+    zip -r kafka-$file.zip $dir -x *.DS_Store*
+done
