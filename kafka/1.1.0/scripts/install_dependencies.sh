@@ -1,19 +1,18 @@
 #!/bin/bash
-source common.sh
+source `dirname "$0"`/common.sh
 
-echo Installing kafka $KafkaDownloadURL...
-file=`basename ${KafkaDownloadURL}`
+echo Installing kafka $KafkaFile...
 export KAFKA_HOME=/app/kafka/$KafkaInstallDirectory
 export PATH=~/bin:$PATH:$KAFKA_HOME/bin
 
-echo Downloading Kafka to $KAFKA_HOME ...
+echo Extracting Kafka to $KAFKA_HOME ...
 su - root -c 'mkdir -p /app/kafka'
-cp ../$KafkaFile /app/$KafkaFile
+cp `dirname "$0"`/../$KafkaFile /app/$KafkaFile
 tar -zxvf /app/$KafkaFile -C /app/kafka
 
 echo Generating zookeeper id ..
 su - root -c 'mkdir -p /tmp/zookeeper'
-python zookeeperIdGenerator.py
+python `dirname "$0"`/zookeeperIdGenerator.py
 source /tmp/zookeeper/myid
 export ZOOKEEPER_ID=$ZOOKEEPERID
 
