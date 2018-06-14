@@ -1,14 +1,14 @@
 version: 0.0
 os: linux
 files:
-  - source: kafka_2.12-1.1.0.tgz
-    destination: /kafka
+  - source: /kafka/1.1.0/kafka_2.12-1.1.0.tgz
+    destination: /app/inst/1.1.0/kafka_2.12-1.1.0.tgz
 hooks:
   BeforeInstall:
-    - location: scripts/install_dependencies
+    - location: kafka/1.1.0/scripts/install_dependencies
       timeout: 300
-    - location: scripts/start_server
+    - location: kafka/1.1.0/scripts/start_server
       timeout: 300
   ApplicationStop:
-    - location: scripts/stop_server
+    - location: kafka/1.1.0/scripts/stop_server
       timeout: 300
