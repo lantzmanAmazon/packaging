@@ -19,7 +19,7 @@ python `dirname "$0"`/zookeeperIdGenerator.py
 source /tmp/zookeeper/myid
 export ZOOKEEPER_ID=$ZOOKEEPERID
 
-echo Applying Zookeeper config
+echo Applying Zookeeper config `dirname "$0"`/$ZK_CONFIG_TYPE/$ZK_NODE_TYPE.properties
 cp `dirname "$0"`/$ZK_CONFIG_TYPE/$ZK_NODE_TYPE.properties $KAFKA_HOME/config/zookeeper.properties
 echo "$(cat $KAFKA_HOME/config/zookeeper.properties)"
 
