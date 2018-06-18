@@ -1,9 +1,12 @@
 #!/bin/bash
 source `dirname "$0"`/common.sh
 
-echo Installing kafka $KafkaFile...
+export ZK_CONFIG_TYPE=$ZKSetup
+export ZK_NODE_TYPE=$ZKSetupNode
 export KAFKA_HOME=/app/kafka/$KafkaInstallDirectory
 export PATH=~/bin:$PATH:$KAFKA_HOME/bin
+
+echo Installing kafka $KafkaFile ($ZK_CONFIG_TYPE/$ZK_NODE_TYPE.properties)...
 
 echo Extracting Kafka to $KAFKA_HOME ...
 su - root -c 'mkdir -p /app/kafka'
@@ -17,7 +20,7 @@ source /tmp/zookeeper/myid
 export ZOOKEEPER_ID=$ZOOKEEPERID
 
 echo Applying Zookeeper config
-echo "initLimit=5" >> $KAFKA_HOME/config/zookeeper.properties
-echo "syncLimit=2" >> $KAFKA_HOME/config/zookeeper.properties
+cp `dirname "$0"`/$ZK_CONFIG_TYPE/$ZK_NODE_TYPE.properties $KAFKA_HOME/config/zookeeper.properties
+echo "$(cat $KAFKA_HOME/config/zookeeper.properties)"
 
 sed -i 's/Defaults    requiretty/Defaults    !requiretty/g' /etc/sudoers
