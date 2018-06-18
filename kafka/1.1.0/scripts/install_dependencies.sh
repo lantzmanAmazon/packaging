@@ -9,7 +9,7 @@ export PATH=~/bin:$PATH:$KAFKA_HOME/bin
 echo Installing kafka $KafkaFile with $ZK_CONFIG_TYPE/$ZK_NODE_TYPE.properties...
 
 echo Extracting Kafka to $KAFKA_HOME ...
-su - root -c 'mkdir -p /app/kafka'
+su - root -c 'mkdir -p /app/kafka/config'
 cp `dirname "$0"`/../$KafkaFile /app/$KafkaFile
 tar -zxvf /app/$KafkaFile -C /app/kafka
 
