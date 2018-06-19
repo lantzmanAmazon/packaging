@@ -13,7 +13,6 @@ tar -zxvf /app/$KafkaFile -C /app/kafka
 
 echo Applying Zookeeper config `dirname "$0"`/$ZK_CONFIG_TYPE/$ZK_NODE_TYPE.properties
 su - root -c "cp `dirname "$0"`/$ZK_CONFIG_TYPE/$ZK_NODE_TYPE.properties $KAFKA_HOME/config/zookeeper.properties"
-echo "$(cat $KAFKA_HOME/config/zookeeper.properties)"
 
 # The instance identity document contains eht0 attached IP, which is not what we want,
 # we want the one assigned to eth1 (the code has a fallback to eth0 altough we don't expect it to be the case)
@@ -48,3 +47,7 @@ if [ -z "$SERVER_ID" ]; then
 fi
 echo Generating zookeeper myid $SERVER_ID file in $KAFKA_HOME/data/myid   ..
 su - root -c "echo $SERVER_ID > $KAFKA_HOME/data/myid"
+
+echo Replacing the current node IP with 0.0.0.0
+CONFIG=$(cat $KAFKA_HOME/config/zookeeper.properties)
+su - root -c "echo ${CONFIG/$PRIVATE_IP/0.0.0.0} | tr " " "\n" >> $KAFKA_HOME/config/zookeeper-local.properties"
