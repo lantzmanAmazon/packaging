@@ -26,10 +26,10 @@ echo mac1: $ETH1MAC
 IP0=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$ETH0MAC/local-ipv4s)
 echo IP0: $IP0
 IP1=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$ETH1MAC/local-ipv4s)
-echo IP0: $IP1
+echo IP1: $IP1
 
 PRIVATE_IP=$IP1
-if [ -z "$IP1" ] || ["$IP1" == "$ETH0IP"];  then
+if [[ (-z "$IP1")  || ( "$IP1" == "$ETH0IP" ) ]]; then
     PRIVATE_IP=$IP0
 fi
 
