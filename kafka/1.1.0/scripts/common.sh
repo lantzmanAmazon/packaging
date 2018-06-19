@@ -10,3 +10,7 @@ export ZK_CONFIG_TYPE=$ZKSetup
 export ZK_NODE_TYPE=$ZKSetupNode
 export KAFKA_HOME=/app/kafka/$KafkaInstallDirectory
 export PATH=~/bin:$PATH:$KAFKA_HOME/bin
+
+#TODO: data and logs should be defined on separate volumes (also need to update the properties to reflect that)
+DATA_DIR=$KAFKA_HOME/data
+LOG_DIR=$KAFKA_HOME/txnLog
