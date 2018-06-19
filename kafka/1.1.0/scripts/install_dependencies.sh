@@ -19,19 +19,20 @@ echo "$(cat $KAFKA_HOME/config/zookeeper.properties)"
 # we want the one assigned to eth1 (the code has a fallback to eth0 altough we don't expect it to be the case)
 ETH0IP=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep privateIp | awk -F\" '{print $4}')
 echo eth0 IP: $ETH0IP
-MACS=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/)
-ETH0MAC=$(echo $MACS | head -n 1) #1st line
-ETH1MAC=$(echo $MACS | head -n 2 | tail -1) #2nd line
+ETH0MAC=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/ | head -n 1) #1st line
+echo mac0: $ETH0MAC
+ETH1MAC=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/ | head -n 2 | tail -1) #2nd line
+echo mac1: $ETH1MAC
 IP0=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$ETH0MAC/local-ipv4s)
-IP1=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$ETH1MAC/local-ipv4s)
 echo IP0: $IP0
+IP1=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$ETH1MAC/local-ipv4s)
 echo IP0: $IP1
 
+PRIVATE_IP=$IP1
 if [ -z "$IP1" ] || ["$IP1" == "$ETH0IP"];  then
     PRIVATE_IP=$IP0
-else 
-    PRIVATE_IP=$IP1
 fi
+
 echo Private IP: $PRIVATE_IP
 if [ -z "$PRIVATE_IP" ]; then
     echo Could not find private IP
