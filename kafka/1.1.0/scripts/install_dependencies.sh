@@ -15,8 +15,29 @@ echo Applying Zookeeper config `dirname "$0"`/$ZK_CONFIG_TYPE/$ZK_NODE_TYPE.prop
 su - root -c "cp `dirname "$0"`/$ZK_CONFIG_TYPE/$ZK_NODE_TYPE.properties $KAFKA_HOME/config/zookeeper.properties"
 echo "$(cat $KAFKA_HOME/config/zookeeper.properties)"
 
-PRIVATE_IP=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep privateIp | awk -F\" '{print $4}')
+# The instance identity document contains eht0 attached IP, which is not what we want,
+# we want the one assigned to eth1 (the code has a fallback to eth0 altough we don't expect it to be the case)
+ETH0IP=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep privateIp | awk -F\" '{print $4}')
+echo eth0 IP: $ETH0
+MACS=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/)
+ETH0MAC=echo $MACS | | awk '{print $1}'
+ETH1MAC=echo $MACS | | awk '{print $2}'
+IP0=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$ETH0MAC/local-ipv4s)
+IP1=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$ETH1MAC/local-ipv4s)
+echo IP0: $IP0
+echo IP0: $IP1
+
+if [ -z "$IP1" ] || ["$IP1" == "$ETH0IP"];  then
+    PRIVATE_IP=$IP0
+else 
+    PRIVATE_IP=$IP1
+fi
 echo Private IP: $PRIVATE_IP
+if [ -z "$PRIVATE_IP" ]; then
+    echo Could not find private IP
+    exit 1
+fi
+
 # The main assumption is that the IP determins the ID, and we control the IPs even when chaning instances
 SERVER_ID=$(cat $KAFKA_HOME/config/zookeeper.properties | grep $PRIVATE_IP | awk -F"=" '{print $1}' | awk -F"." '{print $2}')
 echo Server ID: $SERVER_ID
