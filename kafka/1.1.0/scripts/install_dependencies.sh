@@ -26,4 +26,4 @@ su - root -c "cp `dirname "$0"`/$ZK_CONFIG_TYPE/$ZK_NODE_TYPE.properties $KAFKA_
 set +x	
 echo "$(cat $KAFKA_HOME/config/zookeeper.properties)"
 
-sed -i 's/Defaults    requiretty/Defaults    !requiretty/g' /etc/sudoers
+#sed -i 's/Defaults    requiretty/Defaults    !requiretty/g' /etc/sudoers
