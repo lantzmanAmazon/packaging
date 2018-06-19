@@ -7,6 +7,11 @@ hooks:
   BeforeInstall:
     - location: kafka/1.1.0/scripts/install_dependencies.sh
       timeout: 600
+    - location: kafka/1.1.0/scripts/prepare_zk_storage.sh
+      timeout: 600
+    - location: kafka/1.1.0/scripts/install_zk_config.sh
+      timeout: 600
+  ApplicationStart:
     - location: kafka/1.1.0/scripts/start_server.sh
       timeout: 300
   ApplicationStop:
