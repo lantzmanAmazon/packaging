@@ -8,14 +8,11 @@ su - root -c 'mkdir -p /app/kafka'
 su - root -c  "cp `dirname "$0"`/../$KafkaFile /app/$KafkaFile"
 tar -zxvf /app/$KafkaFile -C /app/kafka
 
-#echo Generating zookeeper id ..
-#su - root -c 'mkdir -p /tmp/zookeeper'
-#python `dirname "$0"`/zookeeperIdGenerator.py
-#source /tmp/zookeeper/myid
-#export ZOOKEEPER_ID=$ZOOKEEPERID
+#TODO: data should be defined in a separate volume
+echo Generating zookeeper myid $SERVER_ID file in $KAFKA_HOME/data/myid   ..
+su - root -c "mkdir -p $KAFKA_HOME/data"
+su - root -c "echo $SERVER_ID > $KAFKA_HOME/data/myid"
 
 echo Applying Zookeeper config `dirname "$0"`/$ZK_CONFIG_TYPE/$ZK_NODE_TYPE.properties
 su - root -c "cp `dirname "$0"`/$ZK_CONFIG_TYPE/$ZK_NODE_TYPE.properties $KAFKA_HOME/config/zookeeper.properties"
 echo "$(cat $KAFKA_HOME/config/zookeeper.properties)"
-
-#sed -i 's/Defaults    requiretty/Defaults    !requiretty/g' /etc/sudoers
