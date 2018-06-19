@@ -8,6 +8,17 @@ su - root -c 'mkdir -p /app/kafka'
 su - root -c  "cp `dirname "$0"`/../$KafkaFile /app/$KafkaFile"
 tar -zxvf /app/$KafkaFile -C /app/kafka
 
+PRIVATE_IP=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep privateIp | awk -F\" '{print $4}')
+echo Private IP: $PRIVATE_IP
+# The main assumption is that the IP determins the ID, and we control the IPs even when chaning instances
+SERVER_ID=$(cat $KAFKA_HOME/config/zookeeper.properties | grep $PRIVATE_IP | awk -F"=" '{print $1}' | awk -F"." '{print $2}')
+echo Server ID: $SERVER_ID
+if [ -z "$SERVER_ID" ]; then
+    echo Could not find server Id
+    exit 1
+fi
+#TODO: add error handling
+
 #TODO: data should be defined in a separate volume
 echo Generating zookeeper myid $SERVER_ID file in $KAFKA_HOME/data/myid   ..
 su - root -c "mkdir -p $KAFKA_HOME/data"
