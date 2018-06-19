@@ -1,11 +1,6 @@
 #!/bin/bash
 source `dirname "$0"`/common.sh
 
-export ZK_CONFIG_TYPE=$ZKSetup
-export ZK_NODE_TYPE=$ZKSetupNode
-export KAFKA_HOME=/app/kafka/$KafkaInstallDirectory
-export PATH=~/bin:$PATH:$KAFKA_HOME/bin
-
 echo Installing kafka $KafkaFile with $ZK_CONFIG_TYPE/$ZK_NODE_TYPE.properties...
 
 echo Extracting Kafka to $KAFKA_HOME ...
