@@ -20,8 +20,8 @@ echo "$(cat $KAFKA_HOME/config/zookeeper.properties)"
 ETH0IP=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep privateIp | awk -F\" '{print $4}')
 echo eth0 IP: $ETH0IP
 MACS=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/)
-ETH0MAC=echo $MACS || awk '{print $1}'
-ETH1MAC=echo $MACS || awk '{print $2}'
+ETH0MAC=$(echo $MACS | head -n 1) #1st line
+ETH1MAC=$(echo $MACS | head -n 2 | tail -1) #2nd line
 IP0=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$ETH0MAC/local-ipv4s)
 IP1=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$ETH1MAC/local-ipv4s)
 echo IP0: $IP0
