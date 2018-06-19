@@ -35,8 +35,8 @@ if [ -z "$SERVER_ID" ]; then
     echo Could not find server Id
     exit 1
 fi
-echo Generating zookeeper myid $SERVER_ID file in $KAFKA_HOME/data/myid   ..
-su - root -c "echo $SERVER_ID > $KAFKA_HOME/data/myid"
+echo Generating zookeeper myid $SERVER_ID file in $DATA_DIR/myid   ..
+su - root -c "echo $SERVER_ID > $DATA_DIR/myid"
 
 echo Replacing $PRIVATE_IP with 0.0.0.0 in the config
 CONFIG=$(cat $KAFKA_HOME/config/zookeeper.properties)
