@@ -1,6 +1,5 @@
 #!/bin/bash
 echo Stopping ...
-source common.sh
+source `dirname "$0"`/common.sh
 
-#$KAFKA_HOME/bin/kafka-server-stop.sh
 $KAFKA_HOME/bin/zookeeper-server-stop.sh
