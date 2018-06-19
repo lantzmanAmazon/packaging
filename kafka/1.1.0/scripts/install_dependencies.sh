@@ -48,7 +48,7 @@ fi
 echo Generating zookeeper myid $SERVER_ID file in $KAFKA_HOME/data/myid   ..
 su - root -c "echo $SERVER_ID > $KAFKA_HOME/data/myid"
 
-echo Replacing the current node IP with 0.0.0.0
+echo Replacing $PRIVATE_IP with 0.0.0.0 in the config
 CONFIG=$(cat $KAFKA_HOME/config/zookeeper.properties)
-echo {CONFIG/$PRIVATE_IP/0.0.0.0} | tr ' ' '\n' > /tmp/zookeeper-local.properties
+echo ${CONFIG/$PRIVATE_IP/0.0.0.0} | tr ' ' '\n' > /tmp/zookeeper-local.properties
 su - root -c "cp /tmp/zookeeper-local.properties $KAFKA_HOME/config/zookeeper-local.properties"
