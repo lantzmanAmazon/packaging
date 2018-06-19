@@ -18,10 +18,10 @@ echo "$(cat $KAFKA_HOME/config/zookeeper.properties)"
 # The instance identity document contains eht0 attached IP, which is not what we want,
 # we want the one assigned to eth1 (the code has a fallback to eth0 altough we don't expect it to be the case)
 ETH0IP=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep privateIp | awk -F\" '{print $4}')
-echo eth0 IP: $ETH0
+echo eth0 IP: $ETH0IP
 MACS=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/)
-ETH0MAC=echo $MACS | | awk '{print $1}'
-ETH1MAC=echo $MACS | | awk '{print $2}'
+ETH0MAC=echo $MACS || awk '{print $1}'
+ETH1MAC=echo $MACS || awk '{print $2}'
 IP0=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$ETH0MAC/local-ipv4s)
 IP1=$(curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$ETH1MAC/local-ipv4s)
 echo IP0: $IP0
